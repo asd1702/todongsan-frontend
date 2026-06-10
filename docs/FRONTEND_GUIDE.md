@@ -90,7 +90,7 @@ src/
 
 ---
 
-## 5. 추천 폴더 구조
+## 5. 폴더 구조
 
 ```text
 src/
@@ -104,23 +104,78 @@ src/
 │  ├─ home/
 │  │  └─ HomePage.tsx
 │  │
+│  ├─ auth/
+│  │  ├─ LoginPage.tsx
+│  │  └─ KakaoCallbackPage.tsx
+│  │
+│  ├─ battle/
+│  │  ├─ BattleListPage.tsx
+│  │  └─ BattleDetailPage.tsx
+│  │
 │  ├─ market/
 │  │  ├─ MarketListPage.tsx
 │  │  ├─ MarketDetailPage.tsx
-│  │  └─ MyPredictionPage.tsx
+│  │  └─ MarketReportPage.tsx
+│  │
+│  ├─ my/
+│  │  ├─ MyPage.tsx
+│  │  ├─ ProfileEditPage.tsx
+│  │  ├─ PointHistoryPage.tsx
+│  │  └─ VisitCertificationPage.tsx
+│  │
+│  ├─ reputation/
+│  │  └─ ReputationDetailPage.tsx
 │  │
 │  ├─ admin/
-│  │  ├─ AdminMarketListPage.tsx
-│  │  ├─ AdminMarketCreatePage.tsx
-│  │  ├─ AdminMarketDetailPage.tsx
-│  │  └─ AdminMarketResultPage.tsx
-│  │
-│  ├─ auth/
-│  │  └─ LoginPage.tsx
+│  │  ├─ AdminDashboardPage.tsx
+│  │  │
+│  │  ├─ market/
+│  │  │  ├─ AdminMarketListPage.tsx
+│  │  │  ├─ AdminMarketCreatePage.tsx
+│  │  │  ├─ AdminMarketDetailPage.tsx
+│  │  │  └─ AdminMarketResultPage.tsx
+│  │  │
+│  │  └─ battle/
+│  │     ├─ AdminBattleListPage.tsx
+│  │     ├─ AdminBattleDetailPage.tsx
+│  │     ├─ AdminBattleAnalysisPage.tsx
+│  │     └─ AdminBattleReportPage.tsx
 │  │
 │  └─ NotFoundPage.tsx
 │
 ├─ entities/
+│  ├─ auth/
+│  │  ├─ api/
+│  │  │  └─ authApi.ts
+│  │  ├─ model/
+│  │  │  ├─ auth.types.ts
+│  │  │  ├─ auth.store.ts
+│  │  │  └─ auth.constants.ts
+│  │  └─ ui/
+│  │
+│  ├─ member/
+│  │  ├─ api/
+│  │  │  └─ memberApi.ts
+│  │  ├─ model/
+│  │  │  ├─ member.types.ts
+│  │  │  ├─ member.keys.ts
+│  │  │  └─ member.constants.ts
+│  │  └─ ui/
+│  │     └─ MemberProfileCard.tsx
+│  │
+│  ├─ battle/
+│  │  ├─ api/
+│  │  │  └─ battleApi.ts
+│  │  ├─ model/
+│  │  │  ├─ battle.types.ts
+│  │  │  ├─ battle.keys.ts
+│  │  │  └─ battle.constants.ts
+│  │  └─ ui/
+│  │     ├─ BattleCard.tsx
+│  │     ├─ BattleStatusBadge.tsx
+│  │     ├─ BattleVoteResult.tsx
+│  │     └─ BattleCommentList.tsx
+│  │
 │  ├─ market/
 │  │  ├─ api/
 │  │  │  └─ marketApi.ts
@@ -132,7 +187,8 @@ src/
 │  │     ├─ MarketCard.tsx
 │  │     ├─ MarketStatusBadge.tsx
 │  │     ├─ MarketOptionList.tsx
-│  │     └─ MarketPriceChart.tsx
+│  │     ├─ MarketPriceChart.tsx
+│  │     └─ MarketSettlementRuleCard.tsx
 │  │
 │  ├─ prediction/
 │  │  ├─ api/
@@ -145,39 +201,60 @@ src/
 │  │     ├─ PredictionStatusBadge.tsx
 │  │     └─ MyPredictionCard.tsx
 │  │
-│  └─ auth/
+│  ├─ point/
+│  │  ├─ api/
+│  │  │  └─ pointApi.ts
+│  │  ├─ model/
+│  │  │  ├─ point.types.ts
+│  │  │  ├─ point.keys.ts
+│  │  │  └─ point.constants.ts
+│  │  └─ ui/
+│  │     ├─ PointAmount.tsx
+│  │     └─ PointHistoryTable.tsx
+│  │
+│  ├─ insight/
+│  │  ├─ api/
+│  │  │  └─ insightApi.ts
+│  │  ├─ model/
+│  │  │  ├─ insight.types.ts
+│  │  │  ├─ insight.keys.ts
+│  │  │  └─ insight.constants.ts
+│  │  └─ ui/
+│  │     └─ InsightReportCard.tsx
+│  │
+│  └─ reputation/
+│     ├─ api/
+│     │  └─ reputationApi.ts
 │     ├─ model/
+│     │  ├─ reputation.types.ts
+│     │  ├─ reputation.keys.ts
+│     │  └─ reputation.constants.ts
 │     └─ ui/
+│        ├─ ReputationScoreBadge.tsx
+│        └─ ReputationSummaryCard.tsx
 │
 ├─ features/
+│  ├─ login-kakao/
+│  ├─ update-profile/
+│  ├─ create-battle-vote/
+│  ├─ create-battle-comment/
 │  ├─ create-prediction/
 │  │  ├─ model/
 │  │  │  ├─ useCreatePrediction.ts
 │  │  │  └─ createPrediction.schema.ts
+│  │  ├─ lib/
+│  │  │  └─ createPredictionIdempotencyKey.ts
 │  │  └─ ui/
-│  │     └─ PredictionModal.tsx
+│  │     ├─ PredictionDrawer.tsx
+│  │     └─ QuotePreview.tsx
 │  │
+│  ├─ request-market-report/
 │  ├─ create-market/
-│  │  ├─ model/
-│  │  │  ├─ useCreateMarket.ts
-│  │  │  └─ createMarket.schema.ts
-│  │  └─ ui/
-│  │     ├─ AdminMarketForm.tsx
-│  │     ├─ MarketOptionForm.tsx
-│  │     └─ NumericRangeOptionForm.tsx
-│  │
 │  ├─ activate-market/
-│  │  ├─ model/
-│  │  │  └─ useActivateMarket.ts
-│  │  └─ ui/
-│  │     └─ ActivateMarketButton.tsx
-│  │
-│  └─ confirm-market-result/
-│     ├─ model/
-│     │  ├─ useConfirmMarketResult.ts
-│     │  └─ confirmMarketResult.schema.ts
-│     └─ ui/
-│        └─ ResultConfirmForm.tsx
+│  ├─ confirm-market-result/
+│  ├─ settle-market/
+│  ├─ void-market/
+│  └─ review-battle/
 │
 ├─ shared/
 │  ├─ api/
@@ -188,15 +265,26 @@ src/
 │  ├─ ui/
 │  │  ├─ button.tsx
 │  │  ├─ input.tsx
+│  │  ├─ textarea.tsx
+│  │  ├─ select.tsx
 │  │  ├─ dialog.tsx
+│  │  ├─ drawer.tsx
 │  │  ├─ badge.tsx
-│  │  └─ skeleton.tsx
+│  │  ├─ card.tsx
+│  │  ├─ tabs.tsx
+│  │  ├─ table.tsx
+│  │  ├─ skeleton.tsx
+│  │  ├─ toast.tsx
+│  │  ├─ empty-state.tsx
+│  │  ├─ error-state.tsx
+│  │  ├─ page-header.tsx
+│  │  └─ section-title.tsx
 │  │
 │  ├─ lib/
+│  │  ├─ cn.ts
 │  │  ├─ formatDate.ts
 │  │  ├─ formatDecimal.ts
-│  │  ├─ createIdempotencyKey.ts
-│  │  └─ cn.ts
+│  │  └─ decimal.ts
 │  │
 │  ├─ constants/
 │  │  └─ routePath.ts
