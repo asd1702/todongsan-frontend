@@ -2,41 +2,43 @@ import { Link } from "react-router-dom";
 import { ROUTE_PATH } from "@/shared/constants/routePath";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card";
 import { buttonVariants } from "@/shared/ui/button";
+import { PageContainer } from "@/shared/ui/page-container";
+import { PageHeader } from "@/shared/ui/page-header";
 import { cn } from "@/shared/lib/utils";
 
 export function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">로그인</CardTitle>
-          <CardDescription>
-            카카오 로그인 진입 페이지입니다.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="rounded-lg bg-muted p-4 text-center text-sm">
-            소셜 로그인을 위한 데모 화면입니다. 실제 OAuth 호출은 아직 구현되지 않았습니다.
-          </div>
-          <div className="flex flex-col gap-2">
+    <PageContainer>
+      <PageHeader
+        title="로그인"
+        description="토동산 서비스를 더 풍부하게 이용하려면 카카오 계정으로 간편하게 시작해 보세요."
+      />
+
+      <div className="mx-auto w-full max-w-md py-8">
+        <Card className="rounded-2xl border-slate-200 bg-white">
+          <CardHeader className="text-center">
+            <CardTitle className="text-xl font-bold">서비스 로그인</CardTitle>
+            <CardDescription>
+              아래 버튼을 클릭하여 가상 소셜 로그인을 진행할 수 있습니다.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="rounded-xl bg-slate-50 border border-slate-100 p-4 text-center text-xs text-slate-500">
+              현재 로그인 및 소셜 연동 모듈은 데모 테스트용으로 가상의 Callback 경로 이동만 지원합니다.
+            </div>
+            
             <Link
               to={ROUTE_PATH.KAKAO_CALLBACK}
               className={cn(
                 buttonVariants(),
-                "w-full bg-[#FEE500] text-[#191919] hover:bg-[#FEE500]/90 text-center"
+                "flex w-full items-center justify-center bg-[#FEE500] text-[#191919] hover:bg-[#FEE500]/90 text-sm font-bold py-2.5 rounded-xl transition-all cursor-pointer"
               )}
             >
-              카카오로 로그인하기 (가상 콜백 이동)
+              카카오 계정으로 로그인 (데모)
             </Link>
-            <Link
-              to={ROUTE_PATH.HOME}
-              className={cn(buttonVariants({ variant: "ghost" }), "w-full text-center")}
-            >
-              홈으로 이동
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+      </div>
+    </PageContainer>
   );
 }

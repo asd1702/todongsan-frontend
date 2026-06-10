@@ -9,37 +9,44 @@ import { MyPage } from "@/pages/my/MyPage";
 import { AdminDashboardPage } from "@/pages/admin/AdminDashboardPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 
+import { AppShell } from "@/shared/ui/app-shell";
+
 export const router = createBrowserRouter([
   {
-    path: ROUTE_PATH.HOME,
-    element: <HomePage />,
-  },
-  {
-    path: ROUTE_PATH.LOGIN,
-    element: <LoginPage />,
-  },
-  {
-    path: ROUTE_PATH.KAKAO_CALLBACK,
-    element: <KakaoCallbackPage />,
-  },
-  {
-    path: ROUTE_PATH.MARKETS,
-    element: <MarketListPage />,
-  },
-  {
-    path: ROUTE_PATH.BATTLES,
-    element: <BattleListPage />,
-  },
-  {
-    path: ROUTE_PATH.MY,
-    element: <MyPage />,
-  },
-  {
-    path: ROUTE_PATH.ADMIN,
-    element: <AdminDashboardPage />,
-  },
-  {
-    path: "*",
-    element: <NotFoundPage />,
+    element: <AppShell />,
+    children: [
+      {
+        path: ROUTE_PATH.HOME,
+        element: <HomePage />,
+      },
+      {
+        path: ROUTE_PATH.LOGIN,
+        element: <LoginPage />,
+      },
+      {
+        path: ROUTE_PATH.KAKAO_CALLBACK,
+        element: <KakaoCallbackPage />,
+      },
+      {
+        path: ROUTE_PATH.MARKETS,
+        element: <MarketListPage />,
+      },
+      {
+        path: ROUTE_PATH.BATTLES,
+        element: <BattleListPage />,
+      },
+      {
+        path: ROUTE_PATH.MY,
+        element: <MyPage />,
+      },
+      {
+        path: ROUTE_PATH.ADMIN,
+        element: <AdminDashboardPage />,
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
+      },
+    ],
   },
 ]);
