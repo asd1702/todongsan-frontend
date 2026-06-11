@@ -5,7 +5,7 @@ import { toDecimal } from "./decimal";
  * 예: "1250.5" -> "1,250.5P"
  */
 export function formatPointAmount(value: string | null | undefined): string {
-  if (value === null || value === undefined || value === "") return "-P";
+  if (value === null || value === undefined || value === "") return "-";
 
   const d = toDecimal(value);
   const parts = d.toString().split(".");
@@ -35,7 +35,7 @@ export function formatMarketPrice(value: string | null | undefined): string {
  * 예: "0.3333" -> "33.33%"
  */
 export function formatPercent(value: string | null | undefined): string {
-  if (value === null || value === undefined || value === "") return "-%";
+  if (value === null || value === undefined || value === "") return "-";
 
   const d = toDecimal(value).times(100);
   const parts = d.toString().split(".");
@@ -50,7 +50,7 @@ export function formatPercent(value: string | null | undefined): string {
  * 예: "1.26666666" -> "1.26666666배"
  */
 export function formatRate(value: string | null | undefined): string {
-  if (value === null || value === undefined || value === "") return "-배";
+  if (value === null || value === undefined || value === "") return "-";
 
   const d = toDecimal(value);
   return `${d.toString()}배`;

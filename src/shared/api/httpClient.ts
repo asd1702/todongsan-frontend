@@ -24,14 +24,16 @@ httpClient.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    // 2. Inject development headers if dev member ID / role are set
-    const devMemberId = import.meta.env.VITE_DEV_MEMBER_ID;
-    const devMemberRole = import.meta.env.VITE_DEV_MEMBER_ROLE;
-    if (devMemberId && config.headers) {
-      config.headers["X-Member-Id"] = devMemberId;
-    }
-    if (devMemberRole && config.headers) {
-      config.headers["X-Member-Role"] = devMemberRole;
+    // 2. Inject development headers if dev member ID / role are set (DEV environment only)
+    if (import.meta.env.DEV) {
+      const devMemberId = import.meta.env.VITE_DEV_MEMBER_ID;
+      const devMemberRole = import.meta.env.VITE_DEV_MEMBER_ROLE;
+      if (devMemberId && config.headers) {
+        config.headers["X-Member-Id"] = devMemberId;
+      }
+      if (devMemberRole && config.headers) {
+        config.headers["X-Member-Role"] = devMemberRole;
+      }
     }
 
     // 3. Preserve external Idempotency-Key
