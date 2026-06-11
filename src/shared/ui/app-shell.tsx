@@ -57,7 +57,7 @@ export function AppShell() {
           {/* Right Actions */}
           <div className="flex items-center gap-2">
             <NavLink
-              to={ROUTE_PATH.ADMIN}
+              to={ROUTE_PATH.LOGIN}
               className={({ isActive }) =>
                 cn(
                   buttonVariants({ variant: "ghost", size: "sm" }),
