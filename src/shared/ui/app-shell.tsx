@@ -1,7 +1,9 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/shared/constants/routePath";
-import { buttonVariants } from "@/shared/ui/button";
+import { Button, buttonVariants } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/utils";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { logout as logoutFromServer } from "@/entities/auth/api/authApi";
 
 const navItems = [
   { label: "홈", to: ROUTE_PATH.HOME },
@@ -11,6 +13,20 @@ const navItems = [
 ];
 
 export function AppShell() {
+  const navigate = useNavigate();
+  const { isAuthenticated, nickname, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logoutFromServer();
+    } catch {
+      // 서버 호출 실패와 무관하게 로컬 인증 정보는 항상 정리한다.
+    } finally {
+      logout();
+      navigate(ROUTE_PATH.LOGIN);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950 flex flex-col font-sans antialiased">
       {/* Sticky Header */}
@@ -56,18 +72,29 @@ export function AppShell() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2">
-            <NavLink
-              to={ROUTE_PATH.LOGIN}
-              className={({ isActive }) =>
-                cn(
-                  buttonVariants({ variant: "ghost", size: "sm" }),
-                  "text-xs font-semibold",
-                  isActive && "bg-slate-100 text-slate-900"
-                )
-              }
-            >
-              로그인
-            </NavLink>
+            {isAuthenticated ? (
+              <>
+                {nickname && (
+                  <span className="text-xs font-semibold text-slate-600">{nickname}님</span>
+                )}
+                <Button variant="ghost" size="sm" className="text-xs font-semibold" onClick={handleLogout}>
+                  로그아웃
+                </Button>
+              </>
+            ) : (
+              <NavLink
+                to={ROUTE_PATH.LOGIN}
+                className={({ isActive }) =>
+                  cn(
+                    buttonVariants({ variant: "ghost", size: "sm" }),
+                    "text-xs font-semibold",
+                    isActive && "bg-slate-100 text-slate-900"
+                  )
+                }
+              >
+                로그인
+              </NavLink>
+            )}
           </div>
         </div>
       </header>

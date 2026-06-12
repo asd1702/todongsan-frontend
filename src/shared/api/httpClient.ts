@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ROUTE_PATH } from "@/shared/constants/routePath";
-import { ACCESS_TOKEN_KEY } from "@/shared/constants/auth";
+import { useAuthStore } from "@/app/store/authStore";
 import { toApiError } from "./apiError";
 
 // Guard variable to prevent multiple simultaneous redirects
@@ -18,8 +18,7 @@ export const httpClient = axios.create({
 httpClient.interceptors.request.use(
   (config) => {
     // 1. Inject Authorization: Bearer {accessToken}
-    // TODO: 추후 Zustand 등 authStore가 구현되면 스토어에서 토큰을 가져오도록 개선하십시오.
-    const token = localStorage.getItem(ACCESS_TOKEN_KEY);
+    const token = useAuthStore.getState().accessToken;
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -61,9 +60,8 @@ httpClient.interceptors.response.use(
 
     // 401 Unauthorized handling
     if (apiError.status === 401 || apiError.errorCode === "UNAUTHORIZED") {
-      // 1. Remove accessToken
-      // TODO: 추후 authStore 도입 시 authStore.clear() 형태로 인증 정보를 일괄 초기화해야 합니다.
-      localStorage.removeItem(ACCESS_TOKEN_KEY);
+      // 1. Clear auth state
+      useAuthStore.getState().logout();
 
       // 2. Prevent infinite redirect loop and duplicate redirect calls
       const currentPath = window.location.pathname;
