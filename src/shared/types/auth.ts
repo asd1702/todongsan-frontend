@@ -37,3 +37,17 @@ export interface RefreshTokenResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+// 카카오 JS SDK 로그인 요청 (POST /api/v1/members/oauth/kakao)
+export interface KakaoOAuthRequest {
+  accessToken: string;
+}
+
+// 카카오 로그인 응답
+export interface KakaoOAuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  memberId: number;
+  nickname: string;
+  isNewMember: boolean;
+}

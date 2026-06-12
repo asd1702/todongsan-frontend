@@ -60,9 +60,10 @@ export const useAuthStore = create<AuthStore>()(
     }),
     {
       name: 'auth-storage',
-      // 민감한 정보는 localStorage에 저장하지 않음
       partialize: (state) => ({
         isAuthenticated: state.isAuthenticated,
+        accessToken: state.accessToken,
+        refreshToken: state.refreshToken,
         memberId: state.memberId,
         nickname: state.nickname,
         role: state.role,
