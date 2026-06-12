@@ -1,7 +1,56 @@
-// auth.types는 shared/types/auth.ts를 재사용
-// 도메인별 추가 타입이 필요한 경우만 여기에 정의
+// 사용자 역할
+export type UserRole = 'USER' | 'ADMIN';
 
-export * from '@/shared/types/auth';
+// 인증 상태
+export interface AuthState {
+  isAuthenticated: boolean;
+  accessToken: string | null;
+  refreshToken: string | null;
+  memberId: number | null;
+  nickname: string | null;
+  role: UserRole | null;
+}
+
+// 로그인 요청
+export interface LoginRequest {
+  code: string;
+  redirectUri?: string;
+}
+
+// 로그인 응답
+export interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  memberId: number;
+  nickname: string;
+  role: UserRole;
+  isNewMember: boolean;
+}
+
+// 토큰 갱신 요청
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
+// 토큰 갱신 응답
+export interface RefreshTokenResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+// 카카오 JS SDK 로그인 요청 (POST /api/v1/members/oauth/kakao)
+export interface KakaoOAuthRequest {
+  accessToken: string;
+}
+
+// 카카오 로그인 응답
+export interface KakaoOAuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  memberId: number;
+  nickname: string;
+  isNewMember: boolean;
+}
 
 // 카카오 로그인 관련
 export interface KakaoAuthParams {

@@ -1,12 +1,14 @@
 import type { BaseEntity } from '@/shared/types/common';
-import type { UserRole } from '@/shared/types/auth';
+
+// 회원 권한 역할
+export type MemberRole = 'USER' | 'ADMIN';
 
 // 회원 정보
 export interface Member extends BaseEntity {
   memberId: number;
   nickname: string;
   email?: string;
-  role: UserRole;
+  role: MemberRole;
   residenceSido?: string;
   residenceSigu?: string;
   pointBalance: string; // Decimal as string
@@ -21,7 +23,7 @@ export interface Member extends BaseEntity {
 export interface MemberSummary {
   memberId: number;
   nickname: string;
-  role: UserRole;
+  role: MemberRole;
   residenceSido?: string;
   residenceSigu?: string;
   createdAt: string;
@@ -43,7 +45,7 @@ export interface DeleteMemberRequest {
 export interface MemberListParams {
   page?: number;
   size?: number;
-  role?: UserRole;
+  role?: MemberRole;
   residenceSido?: string;
   residenceSigu?: string;
   sort?: string;

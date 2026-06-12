@@ -2,7 +2,7 @@ import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "@/shared/constants/routePath";
 import { Button, buttonVariants } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/utils";
-import { useAuth } from "@/shared/hooks/useAuth";
+import { useAuth } from "@/entities/auth/model/useAuth";
 import { logout as logoutFromServer } from "@/entities/auth/api/authApi";
 
 const navItems = [
