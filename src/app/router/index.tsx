@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { AppShell } from '@/shared/ui/app-shell';
+import { AppShell } from '@/app/layout/AppShell';
 
 // Pages
 import { HomePage } from '@/pages/home/HomePage';

@@ -79,9 +79,7 @@ export interface MarketSummary {
 }
 
 // 마켓 상세
-export interface MarketDetail extends Market {
-  // 상세 정보는 Market과 동일
-}
+export type MarketDetail = Market;
 
 // 마켓 가격 이력
 export interface MarketPriceHistory {

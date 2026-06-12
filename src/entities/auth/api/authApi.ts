@@ -1,6 +1,6 @@
 import { httpClient } from "@/shared/api/httpClient";
 import type { ApiResponse } from "@/shared/api/apiResponse";
-import type { KakaoOAuthRequest, KakaoOAuthResponse } from "@/shared/types/auth";
+import type { KakaoOAuthRequest, KakaoOAuthResponse } from "../model/auth.types";
 
 export async function loginWithKakao(accessToken: string): Promise<KakaoOAuthResponse> {
   const response = await httpClient.post<ApiResponse<KakaoOAuthResponse>>(
@@ -16,5 +16,5 @@ export async function loginWithKakao(accessToken: string): Promise<KakaoOAuthRes
 }
 
 export async function logout(): Promise<void> {
-  await httpClient.post("/api/v1/members/logout");
+  await httpClient.post<ApiResponse<null>>("/api/v1/members/logout");
 }

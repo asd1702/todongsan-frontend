@@ -1,7 +1,20 @@
 import axios from "axios";
 import { ROUTE_PATH } from "@/shared/constants/routePath";
-import { useAuthStore } from "@/app/store/authStore";
 import { toApiError } from "./apiError";
+
+type HttpClientAuthConfig = {
+  getAccessToken: () => string | null;
+  clearAuth: () => void;
+};
+
+let authConfig: HttpClientAuthConfig = {
+  getAccessToken: () => null,
+  clearAuth: () => {},
+};
+
+export function configureHttpClientAuth(config: HttpClientAuthConfig) {
+  authConfig = config;
+}
 
 // Guard variable to prevent multiple simultaneous redirects
 let isRedirecting = false;
@@ -18,7 +31,7 @@ export const httpClient = axios.create({
 httpClient.interceptors.request.use(
   (config) => {
     // 1. Inject Authorization: Bearer {accessToken}
-    const token = useAuthStore.getState().accessToken;
+    const token = authConfig.getAccessToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -61,7 +74,7 @@ httpClient.interceptors.response.use(
     // 401 Unauthorized handling
     if (apiError.status === 401 || apiError.errorCode === "UNAUTHORIZED") {
       // 1. Clear auth state
-      useAuthStore.getState().logout();
+      authConfig.clearAuth();
 
       // 2. Prevent infinite redirect loop and duplicate redirect calls
       const currentPath = window.location.pathname;

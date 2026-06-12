@@ -13,7 +13,7 @@ export const marketKeys = {
 export const predictionKeys = {
   all: ["predictions"] as const,
   my: (marketId: number) => ["predictions", "me", marketId] as const,
-  myList: (params: any) => ["predictions", "myList", params] as const,
+  myList: (params: Record<string, unknown>) => ["predictions", "myList", params] as const,
 };
 
 export const adminMarketKeys = {

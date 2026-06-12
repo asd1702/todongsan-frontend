@@ -10,7 +10,7 @@ import { ErrorState } from "@/shared/ui/error-state";
 import { cn } from "@/shared/lib/utils";
 import { exchangeKakaoToken } from "@/shared/lib/kakao";
 import { loginWithKakao } from "@/entities/auth/api/authApi";
-import { useAuth } from "@/shared/hooks/useAuth";
+import { useAuth } from "@/entities/auth/model/useAuth";
 import { toApiError } from "@/shared/api/apiError";
 
 export function KakaoCallbackPage() {
@@ -33,6 +33,7 @@ export function KakaoCallbackPage() {
         refreshToken: data.refreshToken,
         memberId: data.memberId,
         nickname: data.nickname,
+        // TODO: 백엔드 OAuth 응답에 role 필드가 확정되면 data.role로 교체한다.
         role: "USER",
       });
       navigate(ROUTE_PATH.HOME, { replace: true });
