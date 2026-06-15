@@ -39,3 +39,8 @@ export type MarketOption = {
   realPoolAmount?: string;
   virtualPoolAmount?: string;
 };
+
+export type MarketDetail = MarketSummary & {
+  description?: string;
+  resultAnnounceAt?: string;
+};

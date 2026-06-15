@@ -4,4 +4,6 @@ export const marketKeys = {
   all: ["markets"] as const,
   list: (params: MarketListParams) =>
     [...marketKeys.all, "list", params] as const,
+  detail: (marketId: number) =>
+    [...marketKeys.all, "detail", marketId] as const,
 };
