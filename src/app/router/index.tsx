@@ -8,6 +8,8 @@ import { KakaoCallbackPage } from '@/pages/auth/KakaoCallbackPage';
 import { BattleListPage } from '@/pages/battle/BattleListPage';
 import { MarketListPage } from '@/pages/market/MarketListPage';
 import { MyPage } from '@/pages/my/MyPage';
+import ProfileEditPage from '@/pages/my/ProfileEditPage';
+import PointHistoryPage from '@/pages/my/PointHistoryPage';
 import { AdminDashboardPage } from '@/pages/admin/AdminDashboardPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
@@ -75,7 +77,7 @@ export const router = createBrowserRouter([
         path: 'my/profile',
         element: (
           <ProtectedRoute>
-            <div>ProfileEditPage</div>
+            <ProfileEditPage />
           </ProtectedRoute>
         ),
       },
@@ -83,7 +85,7 @@ export const router = createBrowserRouter([
         path: 'my/points',
         element: (
           <ProtectedRoute>
-            <div>PointHistoryPage</div>
+            <PointHistoryPage />
           </ProtectedRoute>
         ),
       },
