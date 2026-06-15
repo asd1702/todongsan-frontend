@@ -2,7 +2,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getMyProfile, updateMyProfile } from "../api/memberApi";
 import { memberKeys } from "./member.keys";
 import type { UpdateMemberProfileRequest } from "./member.types";
-import { useAuthStore } from "@/entities/auth/model/auth.store";
 
 export function useMyProfileQuery() {
   return useQuery({
@@ -16,12 +15,8 @@ export function useUpdateProfileMutation() {
 
   return useMutation({
     mutationFn: (payload: UpdateMemberProfileRequest) => updateMyProfile(payload),
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: memberKeys.me() });
-
-      if (data.nickname) {
-        useAuthStore.getState().updateProfile(data.nickname);
-      }
     },
   });
 }

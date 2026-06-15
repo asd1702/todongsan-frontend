@@ -19,6 +19,7 @@ import {
 import { Skeleton } from "@/shared/ui/skeleton";
 import { ErrorState } from "@/shared/ui/error-state";
 import { useMyProfileQuery, useUpdateProfileMutation } from "@/entities/member/model/member.queries";
+import { useAuthStore } from "@/entities/auth/model/auth.store";
 import { SIDO_LIST, SIGUNGU_MAP } from "@/shared/constants/regions";
 import { formatDate } from "@/shared/lib/formatDate";
 import { toApiError } from "@/shared/api/apiError";
@@ -100,7 +101,10 @@ export default function ProfileEditPage() {
     }
 
     updateMutation.mutate(payload, {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        if (data.nickname) {
+          useAuthStore.getState().updateProfile(data.nickname);
+        }
         toast.success("내 정보가 수정되었습니다.");
         navigate(ROUTE_PATH.MY);
       },
