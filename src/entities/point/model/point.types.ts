@@ -15,8 +15,7 @@ export type PointTransactionType =
 // 포인트 잔액 정보
 export interface PointBalance {
   memberId: number;
-  currentBalance: string; // Decimal as string
-  lastUpdatedAt: string;
+  pointBalance: string; // Decimal as string
 }
 
 // 포인트 거래 이력
@@ -40,14 +39,27 @@ export interface PointTransactionSummary {
   transactionCount: number;
 }
 
+// 포인트 히스토리 조회 필터 (백엔드 type 쿼리 파라미터 기준)
+export type PointHistoryFilterType = 'EARN' | 'SPEND' | 'SETTLE' | 'REFUND';
+
 // 포인트 히스토리 목록 요청 파라미터
 export interface PointHistoryListParams {
   page?: number;
   size?: number;
-  type?: PointTransactionType;
+  type?: PointHistoryFilterType;
   dateFrom?: string;
   dateTo?: string;
   sort?: string;
+}
+
+// 포인트 히스토리 목록 응답 (페이지네이션)
+export interface PointHistoryPage {
+  content: PointHistory[];
+  totalElements: number;
+  totalPages: number;
+  page: number;
+  size: number;
+  last: boolean;
 }
 
 // 포인트 사용/적립 통계 (기간별)

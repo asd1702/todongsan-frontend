@@ -51,8 +51,7 @@ export const memberHandlers = [
       message: null,
       data: {
         memberId: 1,
-        currentBalance: '1500.00',
-        lastUpdatedAt: new Date().toISOString(),
+        pointBalance: '1500.00',
       },
       timestamp: new Date().toISOString(),
     });
