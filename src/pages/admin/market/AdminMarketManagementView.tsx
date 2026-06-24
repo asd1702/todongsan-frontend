@@ -245,7 +245,7 @@ function MarketOverviewCard({ market }: { market: AdminMarketDetail }) {
 }
 
 function formatRangeLabel(option: AdminMarketOption): string {
-  if (option.rangeMin === undefined || option.rangeMax === undefined) return "-";
+  if (option.rangeMin === undefined && option.rangeMax === undefined) return "-";
   const left = option.minInclusive === false ? "(" : "[";
   const right = option.maxInclusive === false ? ")" : "]";
   return `${left}${formatMarketPrice(option.rangeMin)} ~ ${formatMarketPrice(option.rangeMax)}${right}`;
@@ -324,11 +324,6 @@ function ResultConfirmCard({
   const isNumericRange = market.answerType === "NUMERIC_RANGE";
   const pendingCount = market.pendingPredictionCount;
   const hasPendingPredictions = typeof pendingCount === "number" && pendingCount > 0;
-  const isAnswerReady = isNumericRange
-    ? resultValue.trim() !== ""
-    : selectedOptionId !== null;
-  const canSubmit = isActive && !hasPendingPredictions && isAnswerReady;
-
   const rangePreview = useMemo(
     () =>
       isNumericRange
@@ -336,6 +331,10 @@ function ResultConfirmCard({
         : null,
     [isNumericRange, resultValue, market.options],
   );
+  const isAnswerReady = isNumericRange
+    ? rangePreview?.status === "matched"
+    : selectedOptionId !== null;
+  const canSubmit = isActive && !hasPendingPredictions && isAnswerReady;
 
   const selectedAnswerLabel = isNumericRange
     ? resultValue
@@ -400,15 +399,20 @@ function ResultConfirmCard({
             )}
 
             <div>
-              <p className="mb-2 text-sm font-medium text-foreground">정답 선택지</p>
+              <p className="mb-2 text-sm font-medium text-foreground">
+                {isNumericRange ? "실제 결과값" : "정답 선택지"}
+              </p>
               {isNumericRange ? (
                 <div className="space-y-2">
                   <Input
                     value={resultValue}
                     onChange={(event) => setResultValue(event.target.value)}
-                    placeholder="실제값을 입력하세요"
+                    placeholder="선택지 번호가 아니라 실제값을 입력하세요. 예: 0.23"
                     inputMode="decimal"
                   />
+                  <p className="text-sm text-muted-foreground">
+                    숫자 범위형 마켓은 공식 발표된 실제 수치를 입력하면 해당 구간의 선택지가 자동으로 매칭됩니다.
+                  </p>
                   {rangePreview?.status === "matched" && (
                     <p className="text-sm text-emerald-700">
                       이 값이면 정답은 &quot;{rangePreview.option.content}&quot;입니다.
