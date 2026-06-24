@@ -3,10 +3,8 @@ import { Link } from "react-router-dom";
 import { MARKET_LABELS } from "@/entities/market/lib/marketLabels";
 import { getOptionColorMap } from "@/entities/market/lib/optionColor";
 import type { MarketSummary } from "@/entities/market/model/market.types";
-import { toDecimal } from "@/shared/lib/decimal";
 import { formatDday } from "@/shared/lib/formatDate";
 import { formatPercent, formatPointAmount } from "@/shared/lib/formatDecimal";
-import { cn } from "@/shared/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 
 type PopularMarketCardProps = {
@@ -18,25 +16,8 @@ export function PopularMarketCard({ market }: PopularMarketCardProps) {
     market.options.map((option) => option.optionId),
   );
 
-  // 우세 선택지(가격 최댓값)만 옵션색 강조. 동점이면 강조 없음.
-  const maxPrice = market.options.reduce(
-    (max, option) => {
-      const price = toDecimal(option.currentPrice);
-      return price.greaterThan(max) ? price : max;
-    },
-    toDecimal(market.options[0]?.currentPrice ?? "0"),
-  );
-  const leaders = market.options.filter((option) =>
-    toDecimal(option.currentPrice).equals(maxPrice),
-  );
-  const leaderId = leaders.length === 1 ? leaders[0].optionId : undefined;
-
   const deadlineLabel =
-    market.displayStatus === "CLOSED_BY_TIME"
-      ? "마감"
-      : formatDday(market.closeAt);
-
-  // 인기 정렬 기준과 동일한 실제 참여 볼륨. 없으면 totalPoolAmount로 폴백.
+    market.displayStatus === "CLOSED_BY_TIME" ? "마감" : formatDday(market.closeAt);
   const volume = market.totalRealPoolAmount ?? market.totalPoolAmount;
 
   return (
@@ -58,33 +39,22 @@ export function PopularMarketCard({ market }: PopularMarketCardProps) {
           <div className="grid grid-cols-2 gap-2">
             {market.options.map((option) => {
               const color = colorMap[option.optionId];
-              const isLeader = option.optionId === leaderId;
 
               return (
                 <div
                   key={option.optionId}
-                  className={cn(
-                    "rounded-lg border px-3 py-2",
-                    isLeader ? "" : "border-border bg-secondary/40",
-                  )}
-                  style={
-                    isLeader
-                      ? {
-                          borderColor: color?.base,
-                          backgroundColor: `${color?.base}1a`,
-                        }
-                      : undefined
-                  }
+                  className="rounded-lg border px-3 py-2"
+                  style={{
+                    borderColor: color.base,
+                    backgroundColor: `${color.base}1a`,
+                  }}
                 >
                   <p className="line-clamp-1 text-xs text-muted-foreground">
                     {option.content}
                   </p>
                   <p
-                    className={cn(
-                      "mt-0.5 text-lg font-medium tabular-nums",
-                      !isLeader && "text-foreground",
-                    )}
-                    style={isLeader ? { color: color?.darker } : undefined}
+                    className="mt-0.5 text-lg font-medium tabular-nums"
+                    style={{ color: color.darker }}
                   >
                     {formatPercent(option.currentPrice)}
                   </p>

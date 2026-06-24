@@ -1,7 +1,6 @@
 import { Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { toDecimal } from "@/shared/lib/decimal";
 import { formatDateTime, formatRelativeDays } from "@/shared/lib/formatDate";
 import {
   decimalToPercentValue,
@@ -10,9 +9,9 @@ import {
 } from "@/shared/lib/formatDecimal";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
-import { cn } from "@/shared/lib/utils";
 
 import { MARKET_LABELS } from "../lib/marketLabels";
+import { getOptionColorMap } from "../lib/optionColor";
 import type { MarketSummary } from "../model/market.types";
 import { MarketStatusBadge } from "./MarketStatusBadge";
 
@@ -21,13 +20,8 @@ type MarketCardProps = {
 };
 
 export function MarketCard({ market }: MarketCardProps) {
-  // 다수 의견(최고 확률) 옵션을 초록, 나머지를 주황으로 표시하기 위해 최고 가격을 구한다.
-  const maxPrice = market.options.reduce(
-    (max, option) => {
-      const price = toDecimal(option.currentPrice);
-      return price.greaterThan(max) ? price : max;
-    },
-    toDecimal(market.options[0]?.currentPrice ?? "0"),
+  const colorMap = getOptionColorMap(
+    market.options.map((option) => option.optionId),
   );
 
   return (
@@ -59,8 +53,7 @@ export function MarketCard({ market }: MarketCardProps) {
         <CardContent className="flex flex-1 flex-col gap-3">
           <div className="grid gap-2.5">
             {market.options.map((option) => {
-              const isMajority =
-                toDecimal(option.currentPrice).greaterThanOrEqualTo(maxPrice);
+              const color = colorMap[option.optionId];
 
               return (
                 <div key={option.optionId} className="space-y-1.5">
@@ -69,22 +62,18 @@ export function MarketCard({ market }: MarketCardProps) {
                       {option.content}
                     </span>
                     <span
-                      className={cn(
-                        "shrink-0 text-sm font-bold tabular-nums",
-                        isMajority ? "text-green-600" : "text-orange-600",
-                      )}
+                      className="shrink-0 text-sm font-bold tabular-nums"
+                      style={{ color: color.darker }}
                     >
                       {formatPercent(option.currentPrice)}
                     </span>
                   </div>
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
                     <div
-                      className={cn(
-                        "h-full rounded-full transition-all",
-                        isMajority ? "bg-green-500" : "bg-orange-500",
-                      )}
+                      className="h-full rounded-full transition-all"
                       style={{
                         width: `${decimalToPercentValue(option.currentPrice)}%`,
+                        backgroundColor: color.base,
                       }}
                     />
                   </div>
@@ -106,7 +95,7 @@ export function MarketCard({ market }: MarketCardProps) {
               <TooltipContent>
                 <p className="font-semibold">{formatRelativeDays(market.closeAt)}</p>
                 <p className="mt-0.5 text-muted-foreground">
-                  예측이 마감되는 예정 시각입니다. 정산 세부 사항은 마켓 규칙을
+                  예측이 마감되는 예정 시각입니다. 정산 관련 사항은 마켓 규칙을
                   참고하세요.
                 </p>
               </TooltipContent>

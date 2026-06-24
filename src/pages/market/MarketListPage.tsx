@@ -1,5 +1,6 @@
 import { MarketCard } from "@/entities/market/ui/MarketCard";
 import { useMarketListQuery } from "@/entities/market/model/useMarketListQuery";
+import type { MarketListParams } from "@/entities/market/model/market.types";
 import { isApiError } from "@/shared/api/apiError";
 import { Button } from "@/shared/ui/button";
 import { EmptyState } from "@/shared/ui/empty-state";
@@ -8,7 +9,8 @@ import { PageContainer } from "@/shared/ui/page-container";
 import { PageHeader } from "@/shared/ui/page-header";
 import { Skeleton } from "@/shared/ui/skeleton";
 
-const marketListParams = {
+const marketListParams: MarketListParams = {
+  displayStatus: "ACTIVE",
   page: 0,
   size: 20,
 };
