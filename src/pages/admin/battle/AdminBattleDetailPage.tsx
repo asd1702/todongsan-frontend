@@ -92,7 +92,7 @@ function BattleInfoCard({ battle }: { battle: BattleDetail }) {
           {region} · {formatDate(battle.startAt)} ~ {formatDate(battle.endAt)}
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
         <dl className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           <InfoItem label="선택지 A" value={battle.optionA} />
           <InfoItem label="선택지 B" value={battle.optionB} />
@@ -109,6 +109,12 @@ function BattleInfoCard({ battle }: { battle: BattleDetail }) {
             <InfoItem label="정산일" value={formatDate(battle.settledAt)} />
           )}
         </dl>
+        {battle.description && (
+          <div className="rounded-lg bg-muted/40 p-3">
+            <dt className="text-xs text-muted-foreground">설명</dt>
+            <dd className="mt-1 text-sm text-foreground whitespace-pre-wrap leading-relaxed">{battle.description}</dd>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

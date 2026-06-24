@@ -119,9 +119,6 @@ export default function BattleDetailPage() {
       {/* 헤더 */}
       <div className="space-y-3 border-b border-slate-200/60 pb-5">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-muted-foreground">
-            #{battle.battleId}
-          </span>
           <BattleStatusBadge status={battle.status} settled={settled} />
         </div>
         <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
@@ -220,6 +217,12 @@ export default function BattleDetailPage() {
                 />
               )}
             </dl>
+            {battle.description && (
+              <div className="mt-4 border-t border-border pt-4">
+                <p className="mb-1 text-xs font-medium text-muted-foreground">설명</p>
+                <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">{battle.description}</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
