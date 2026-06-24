@@ -32,6 +32,8 @@ export type BattleSummary = {
   optionB: string;
   status: BattleStatus;
   voteCount: number;
+  optionACount: number;
+  optionBCount: number;
   commentCount?: number;
   startAt: string;
   endAt: string;
@@ -44,6 +46,7 @@ export type BattleDetail = {
   title: string;
   optionA: string;
   optionB: string;
+  description: string | null;
   sido: string | null;
   sigu: string | null;
   status: BattleStatus;
@@ -197,6 +200,12 @@ export type MyCreatedBattleListParams = {
 };
 
 // ---- 관리자 전용 ----
+
+export type AdminBattleStatusCounts = {
+  pending: number;
+  active: number;
+  closed: number;
+};
 
 export type AdminBattlePendingListParams = {
   page?: number;

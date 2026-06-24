@@ -38,4 +38,5 @@ export const adminBattleKeys = {
   analysis: (battleId: number) =>
     ["admin", "battles", "analysis", battleId] as const,
   report: (battleId: number) => ["admin", "battles", "report", battleId] as const,
+  statusCounts: () => ["admin", "battles", "status-counts"] as const,
 };

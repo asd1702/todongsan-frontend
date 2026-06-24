@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+import { useAdminBattleStatusCountsQuery } from "@/entities/battle/model/useAdminBattleStatusCountsQuery";
 import { useAdminMarketStatusCountsQuery } from "@/entities/market/model/useAdminMarketStatusCountsQuery";
 import { ROUTE_PATH } from "@/shared/constants/routePath";
 import {
@@ -15,6 +16,12 @@ import { PageHeader } from "@/shared/ui/page-header";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Button } from "@/shared/ui/button";
 
+const BATTLE_STATUS_CONFIG = [
+  { key: "pending", label: "검수 대기" },
+  { key: "active", label: "진행 중" },
+  { key: "closed", label: "종료됨" },
+] as const;
+
 const MARKET_STATUS_CONFIG = [
   { key: "pending",              label: "승인 대기"       },
   { key: "active",               label: "진행 중"         },
@@ -28,6 +35,12 @@ const MARKET_STATUS_CONFIG = [
 
 export function AdminDashboardPage() {
   const { data: marketCounts, isLoading, isError, refetch } = useAdminMarketStatusCountsQuery();
+  const {
+    data: battleCounts,
+    isLoading: isBattleLoading,
+    isError: isBattleError,
+    refetch: refetchBattle,
+  } = useAdminBattleStatusCountsQuery();
 
   return (
     <PageContainer>
@@ -130,15 +143,61 @@ export function AdminDashboardPage() {
             </CardAction>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-lg bg-slate-50 p-4">
-              <p className="text-xs font-semibold text-slate-600">
-                배틀 검수 대기 및 진행 현황은 목록에서 확인하세요.
-              </p>
-            </div>
-            {/* TODO: 관리자 배틀 개설 화면/라우트가 아직 없음. /battles/new 재사용 여부는 기획 확인 필요 */}
+            {isBattleError ? (
+              <div className="rounded-lg bg-slate-50 p-4 flex items-center justify-between gap-2">
+                <span className="text-xs font-semibold text-slate-600">현황을 불러오지 못했습니다</span>
+                <Button variant="outline" size="sm" onClick={() => refetchBattle()}>
+                  재시도
+                </Button>
+              </div>
+            ) : isBattleLoading ? (
+              <div className="rounded-lg bg-slate-50 p-4 space-y-2.5">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <Skeleton className="h-3 w-20 shrink-0" />
+                    <Skeleton className="h-3 flex-1" />
+                    <Skeleton className="h-3 w-6 shrink-0" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              (() => {
+                const rows = BATTLE_STATUS_CONFIG.filter(
+                  ({ key }) => (battleCounts?.[key] ?? 0) > 0
+                );
+                const maxCount = rows.length > 0
+                  ? Math.max(...rows.map(({ key }) => battleCounts![key]))
+                  : 0;
+                return (
+                  <div className="rounded-lg bg-slate-50 p-4 space-y-2">
+                    {rows.length === 0 ? (
+                      <p className="text-xs text-slate-400 text-center py-2">배틀이 없습니다</p>
+                    ) : (
+                      rows.map(({ key, label }) => {
+                        const count = battleCounts![key];
+                        const pct = Math.round((count / maxCount) * 100);
+                        const isMax = count === maxCount;
+                        return (
+                          <div key={key} className="flex items-center gap-2">
+                            <span className="w-32 shrink-0 text-xs text-slate-600 font-medium truncate">{label}</span>
+                            <div className="flex-1 bg-slate-100 rounded h-3 overflow-hidden">
+                              <div
+                                className={`${isMax ? "bg-slate-800" : "bg-slate-300"} h-full rounded transition-all duration-300`}
+                                style={{ width: `${pct}%` }}
+                              />
+                            </div>
+                            <span className="w-8 shrink-0 text-xs text-right font-semibold text-slate-700">{count}</span>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                );
+              })()
+            )}
             <Button
-              className="w-full rounded-xl bg-slate-900 text-white font-bold py-2.5 text-xs"
-              disabled
+              className="w-full rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 text-xs"
+              render={<Link to={ROUTE_PATH.BATTLE_CREATE} />}
             >
               신규 배틀 개설하기
             </Button>
