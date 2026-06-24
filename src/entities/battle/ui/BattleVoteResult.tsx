@@ -1,7 +1,5 @@
 import { Trophy } from "lucide-react";
 
-import { cn } from "@/shared/lib/utils";
-
 import type { BattleResult, WinningOption } from "../model/battle.types";
 
 type BattleVoteResultProps = {
@@ -23,15 +21,19 @@ function formatRatio(ratio: number): string {
   return `${Math.round(ratio * 10) / 10}%`;
 }
 
+const OPTION_COLOR = {
+  A: { bar: "#378ADD", text: "#185FA5" },
+  B: { bar: "#BA7517", text: "#854F0B" },
+} as const;
+
 function OptionRow({ side, label, count, ratio, isWinner }: OptionRowProps) {
-  const accent = side === "A" ? "bg-emerald-500" : "bg-sky-500";
-  const tag = side === "A" ? "text-emerald-700" : "text-sky-700";
+  const color = OPTION_COLOR[side];
 
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between gap-3 text-sm">
         <span className="inline-flex items-center gap-1.5 font-medium">
-          <span className={cn("text-xs font-bold", tag)}>{side}</span>
+          <span className="text-xs font-bold" style={{ color: color.text }}>{side}</span>
           <span className="line-clamp-1">{label}</span>
           {isWinner && (
             <Trophy className="size-3.5 text-amber-500" aria-label="승리" />
@@ -46,8 +48,8 @@ function OptionRow({ side, label, count, ratio, isWinner }: OptionRowProps) {
       </div>
       <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
         <div
-          className={cn("h-full rounded-full transition-all", accent)}
-          style={{ width: `${Math.min(Math.max(ratio, 0), 100)}%` }}
+          className="h-full rounded-full transition-all"
+          style={{ width: `${Math.min(Math.max(ratio, 0), 100)}%`, backgroundColor: color.bar }}
         />
       </div>
     </div>

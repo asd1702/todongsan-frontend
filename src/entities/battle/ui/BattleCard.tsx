@@ -36,30 +36,33 @@ export function BattleCard({ battle }: BattleCardProps) {
                   const total = battle.optionACount + battle.optionBCount;
                   const pctA = total > 0 ? Math.round((battle.optionACount / total) * 100) : 0;
                   const pctB = total > 0 ? 100 - pctA : 0;
-                  const aWins = battle.optionACount >= battle.optionBCount;
                   const isDraw = total === 0 || battle.optionACount === battle.optionBCount;
+                  const colorA = isDraw ? "#888780" : "#378ADD";
+                  const colorAText = isDraw ? "#5F5E5A" : "#185FA5";
+                  const colorB = isDraw ? "#888780" : "#BA7517";
+                  const colorBText = isDraw ? "#5F5E5A" : "#854F0B";
                   return (
                     <>
-                      <div className="space-y-1">
+                      <div className="space-y-1.5">
                         <div className="flex items-center justify-between gap-3">
                           <span className="line-clamp-1 text-sm font-medium">{battle.optionA}</span>
-                          <span className={`shrink-0 text-sm font-bold tabular-nums ${isDraw ? "text-muted-foreground" : aWins ? "text-green-600" : "text-orange-500"}`}>
+                          <span className="shrink-0 text-sm font-bold tabular-nums" style={{ color: colorAText }}>
                             {total > 0 ? `${pctA}%` : "-"}
                           </span>
                         </div>
                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                          <div className={`h-full rounded-full ${isDraw ? "bg-muted-foreground/30" : aWins ? "bg-green-500" : "bg-orange-400"}`} style={{ width: `${pctA}%` }} />
+                          <div className="h-full rounded-full transition-all" style={{ width: `${pctA}%`, backgroundColor: colorA }} />
                         </div>
                       </div>
-                      <div className="space-y-1">
+                      <div className="space-y-1.5">
                         <div className="flex items-center justify-between gap-3">
                           <span className="line-clamp-1 text-sm font-medium">{battle.optionB}</span>
-                          <span className={`shrink-0 text-sm font-bold tabular-nums ${isDraw ? "text-muted-foreground" : !aWins ? "text-green-600" : "text-orange-500"}`}>
+                          <span className="shrink-0 text-sm font-bold tabular-nums" style={{ color: colorBText }}>
                             {total > 0 ? `${pctB}%` : "-"}
                           </span>
                         </div>
                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                          <div className={`h-full rounded-full ${isDraw ? "bg-muted-foreground/30" : !aWins ? "bg-green-500" : "bg-orange-400"}`} style={{ width: `${pctB}%` }} />
+                          <div className="h-full rounded-full transition-all" style={{ width: `${pctB}%`, backgroundColor: colorB }} />
                         </div>
                       </div>
                     </>
