@@ -31,30 +31,35 @@ export function BattleCard({ battle }: BattleCardProps) {
         </CardHeader>
         <CardContent className="flex flex-1 flex-col gap-3">
           <div className="grid gap-2">
-            {battle.status === "CLOSED" && battle.voteCount > 0
+            {battle.status === "CLOSED"
               ? (() => {
                   const total = battle.optionACount + battle.optionBCount;
-                  const pctA = Math.round((battle.optionACount / total) * 100);
-                  const pctB = 100 - pctA;
+                  const pctA = total > 0 ? Math.round((battle.optionACount / total) * 100) : 0;
+                  const pctB = total > 0 ? 100 - pctA : 0;
                   const aWins = battle.optionACount >= battle.optionBCount;
+                  const isDraw = total === 0 || battle.optionACount === battle.optionBCount;
                   return (
                     <>
                       <div className="space-y-1">
                         <div className="flex items-center justify-between gap-3">
                           <span className="line-clamp-1 text-sm font-medium">{battle.optionA}</span>
-                          <span className={`shrink-0 text-sm font-bold tabular-nums ${aWins ? "text-green-600" : "text-orange-500"}`}>{pctA}%</span>
+                          <span className={`shrink-0 text-sm font-bold tabular-nums ${isDraw ? "text-muted-foreground" : aWins ? "text-green-600" : "text-orange-500"}`}>
+                            {total > 0 ? `${pctA}%` : "-"}
+                          </span>
                         </div>
                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                          <div className={`h-full rounded-full ${aWins ? "bg-green-500" : "bg-orange-400"}`} style={{ width: `${pctA}%` }} />
+                          <div className={`h-full rounded-full ${isDraw ? "bg-muted-foreground/30" : aWins ? "bg-green-500" : "bg-orange-400"}`} style={{ width: `${pctA}%` }} />
                         </div>
                       </div>
                       <div className="space-y-1">
                         <div className="flex items-center justify-between gap-3">
                           <span className="line-clamp-1 text-sm font-medium">{battle.optionB}</span>
-                          <span className={`shrink-0 text-sm font-bold tabular-nums ${!aWins ? "text-green-600" : "text-orange-500"}`}>{pctB}%</span>
+                          <span className={`shrink-0 text-sm font-bold tabular-nums ${isDraw ? "text-muted-foreground" : !aWins ? "text-green-600" : "text-orange-500"}`}>
+                            {total > 0 ? `${pctB}%` : "-"}
+                          </span>
                         </div>
                         <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                          <div className={`h-full rounded-full ${!aWins ? "bg-green-500" : "bg-orange-400"}`} style={{ width: `${pctB}%` }} />
+                          <div className={`h-full rounded-full ${isDraw ? "bg-muted-foreground/30" : !aWins ? "bg-green-500" : "bg-orange-400"}`} style={{ width: `${pctB}%` }} />
                         </div>
                       </div>
                     </>
